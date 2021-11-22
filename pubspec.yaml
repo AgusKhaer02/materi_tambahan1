@@ -35,6 +35,11 @@ dependencies:
   permission_handler: 8.0.0
 # membaca kontak pada perangkat anda
   contacts_service: ^0.6.3
+# membaca lokasi
+  location: ^4.3.0
+# untuk geotagging
+  flutter_exif_plugin: ^1.0.0
+  floor: ^1.2.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -44,6 +49,8 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  floor_generator: ^1.2.0
+  build_runner: ^2.1.5
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

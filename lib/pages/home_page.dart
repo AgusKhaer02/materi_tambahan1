@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:materi_tambahan1/pages/image_handling.dart';
+import 'package:materi_tambahan1/pages/note_add.dart';
+import 'package:materi_tambahan1/pages/note_list.dart';
 
 import 'contacts_page.dart';
 
@@ -38,6 +40,26 @@ class HomePage extends StatelessWidget {
             child: Text("Contacts"),
           ),
 
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => NoteAddScreen(),
+                ),
+              );
+            },
+            child: Text("Offline Data Storage"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => NoteList(),
+                ),
+              );
+            },
+            child: Text("List Data Note"),
+          ),
         ],
       ),
     );

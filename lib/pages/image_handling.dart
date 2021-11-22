@@ -1,8 +1,13 @@
+
+
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_exif_plugin/flutter_exif_plugin.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:materi_tambahan1/location/gps_tracker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 typedef void OnPickImageCallback(
     double? maxWidth, double? maxHeight, int? quality);
@@ -47,6 +52,10 @@ class _ImageHandlingState extends State<ImageHandling> {
     setState(() {});
   }
 
+  captureCameraGPS() async{
+    await picker.pickImage(source: ImageSource.camera).then((XFile? value) => saveAndUpdateExif(value) );
+  }
+
   @override
   Widget build(BuildContext context) {
     print("setState");
@@ -69,6 +78,14 @@ class _ImageHandlingState extends State<ImageHandling> {
             },
             child: Text("Pick from Camera"),
           ),
+          ElevatedButton(
+            onPressed: () {
+              captureCameraGPS();
+            },
+            child: Text("Pick from Camera with GPS"),
+          ),
+
+
           ElevatedButton(
             onPressed: () {
               pickCameraMultiple();
@@ -105,4 +122,41 @@ class _ImageHandlingState extends State<ImageHandling> {
       ),
     );
   }
+
+  Future<void> initializePermission() async{
+    Map<Permission, PermissionStatus> request = await [
+      Permission.accessMediaLocation,
+      Permission.manageExternalStorage,
+      Permission.storage,
+      Permission.location,
+    ].request();
+  }
+  @override
+  void initState() {
+    super.initState();
+    initializePermission();
+  }
+
+  saveAndUpdateExif(XFile? value) {
+    var directory = "storage/emulated/0/MateriTambahan1";
+    var  milis, path;
+    milis = DateTime.now().millisecond;
+    path = "$directory/$milis.jpg";
+
+    Directory(directory).create();
+
+    value!.saveTo(path);
+
+    final exif = FlutterExif.fromPath(path!);
+
+    GPSTracker().getLocation().then((value) => {
+      if(value != null){
+        // set lat dan long
+        exif.setLatLong(value.latitude!, value.longitude!),
+        // update exifdata
+        exif.saveAttributes(),
+      }
+    });
+  }
+
 }

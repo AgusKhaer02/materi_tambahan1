@@ -1,5 +1,6 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
+import 'package:materi_tambahan1/pages/detail_contact.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ContactsPage extends StatefulWidget {
@@ -122,24 +123,26 @@ class ShowContacts extends StatelessWidget {
     required this.contacts,
   }) : super(key: key);
 
-  String showNumberOrName(int index){
+  String showNumberOrName(int index) {
     //cek apakah kontaknya tidak null
-    if(contacts[index] != null){
+    if (contacts[index] != null) {
       // cek apakah nilai dari displayname tidak null dan tidak kosong
-      if(contacts[index].displayName != null && contacts[index].displayName!.isNotEmpty){
+      if (contacts[index].displayName != null &&
+          contacts[index].displayName!.isNotEmpty) {
         // tampilkan namanya
         return contacts[index].displayName.toString();
-      }else{
+      } else {
         // jika tidak ada nama, cek apakah terdapat nomor telepon?
-        if(contacts[index].phones != null && contacts[index].phones!.isNotEmpty){
+        if (contacts[index].phones != null &&
+            contacts[index].phones!.isNotEmpty) {
           //jika iya, maka tampilkan nomor telepon sebagai penggantinya dari nama kontak
-          return contacts[index].phones!.map((e) => e.value ).toString();
-        } else{
+          return contacts[index].phones!.map((e) => e.value).toString();
+        } else {
           // kalo tidak muncul pesan no number
           return "No Number";
         }
       }
-    } else{
+    } else {
       // pesan error yang didapat ketika nilai contacts adalah null
       return "Data is null";
     }
@@ -151,8 +154,31 @@ class ShowContacts extends StatelessWidget {
       child: ListView.builder(
         itemCount: contacts.length,
         itemBuilder: (context, index) {
-          return Container(
-            child: Text(showNumberOrName(index)),
+          return GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => DetailContact(contact: contacts[index]),
+                ),
+              );
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              margin: EdgeInsets.symmetric(vertical: 2),
+              decoration: BoxDecoration(color: Colors.white),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    child: Icon(Icons.person),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  //text
+                  Text(showNumberOrName(index)),
+                ],
+              ),
+            ),
           );
         },
       ),
